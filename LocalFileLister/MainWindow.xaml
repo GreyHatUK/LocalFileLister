@@ -1,0 +1,50 @@
+﻿<Window x:Class="LocalFileLister.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LocalFileLister"
+        mc:Ignorable="d"
+        Title="Local File Lister" Height="450" Width="800">
+    <Grid>
+        
+        <DockPanel Margin="5" >
+            
+
+            <DockPanel DockPanel.Dock="Top">
+            <ListBox x:Name="lbLocalDrives" ItemsSource="{Binding DriveList}" Grid.Row="1" Grid.Column="5" Height="50"  Background="Azure" DockPanel.Dock="Left" Width="100">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Name="cbxDrives" Content="{Binding DriveLetter}" IsChecked="{Binding IsSelected}" Width="50" ></CheckBox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button Height="30" Width="100" HorizontalAlignment="Right" Margin="10" Name="btnRefreshData" Click="btnRefreshData_Click"  Background="Azure" Content="Find files" DockPanel.Dock="Right">
+            </Button>
+            </DockPanel>
+            
+            <ListView Margin="5,10" Name="lvFiles"  Background="Azure" DockPanel.Dock="Top">
+                <ListView.Resources>
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    </Style>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView>
+                       
+                        <GridViewColumn Header="File Name" Width="150"  DisplayMemberBinding="{Binding FileName}"></GridViewColumn>
+                        <GridViewColumn Header="Extention" Width="100" DisplayMemberBinding="{Binding FileExtension}"></GridViewColumn>
+                        <GridViewColumn Header="Full path" DisplayMemberBinding="{Binding FullPath}" Width="{Binding ElementName=helperField, Path=ActualWidth}"></GridViewColumn>
+                       
+                    </GridView>
+                </ListView.View>
+            </ListView>      
+        </DockPanel>
+        <Grid Visibility="Hidden">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="2" x:Name="helperField"/>
+        </Grid>
+    </Grid>
+</Window>
