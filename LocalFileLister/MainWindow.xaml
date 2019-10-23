@@ -20,8 +20,10 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+                
             <Button Height="30" Width="100" HorizontalAlignment="Right" Margin="10" Name="btnRefreshData" Click="btnRefreshData_Click"  Background="Azure" Content="Find files" DockPanel.Dock="Right">
             </Button>
+                <TextBlock Foreground="red" Name="tbxErrorMessage" DockPanel.Dock="Right" FontSize="26" Margin="5,0" HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>
             </DockPanel>
             
             <ListView Margin="5,10" Name="lvFiles"  Background="Azure" DockPanel.Dock="Top">

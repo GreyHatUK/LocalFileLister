@@ -20,11 +20,11 @@ namespace DriveManagement
         }
 
        /// <summary>
-       /// 
+       /// Gets all files under a file path
        /// </summary>
        /// <param name="drivePath"></param>
-       /// <returns></returns>
-        public static List<LocalFileDto> GetLocalFiles(string drivePath)
+       /// <returns>List of files with extensions</returns>
+        public static List<LocalFileDto> GetPathFiles(string drivePath)
         {
             var localFileList = new List<LocalFileDto>();
 
@@ -34,7 +34,7 @@ namespace DriveManagement
         }
 
         /// <summary>
-        /// 
+        /// Traverse function borowed from stackoverflow
         /// </summary>
         /// <param name="rootDirectory"></param>
         /// <returns></returns>
@@ -43,8 +43,7 @@ namespace DriveManagement
             IEnumerable<string> files = Enumerable.Empty<string>();
             IEnumerable<string> directories = Enumerable.Empty<string>();
             try
-            {
-                // The test for UnauthorizedAccessException.
+            {               
                 var permission = new FileIOPermission(FileIOPermissionAccess.PathDiscovery, rootDirectory);
                 permission.Demand();
 
@@ -53,7 +52,6 @@ namespace DriveManagement
             }
             catch
             {
-                // Ignore folder (access denied).
                 rootDirectory = null;
             }
 

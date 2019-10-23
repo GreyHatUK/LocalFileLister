@@ -40,6 +40,7 @@ namespace LocalFileLister
         {
             try
             {
+               
                 DriveList = new ObservableCollection<DriveDto>();
                 var driveList = DriveOperations.GetLocalDrives();
                 foreach (var drive in driveList)
@@ -50,20 +51,20 @@ namespace LocalFileLister
             }
             catch
             {
-
+                tbxErrorMessage.Text = "Can't access drive information";
             }
         }
 
         public void GetFiles()
         {
             try
-            {
+            {               
                 var fullFileList = new List<LocalFileDto>();
                 foreach (var drive in DriveList.ToArray())
                 {
                     if (drive.IsSelected)
                     {
-                        fullFileList.AddRange(DriveOperations.GetLocalFiles(drive.DriveLetter));
+                        fullFileList.AddRange(DriveOperations.GetPathFiles(drive.DriveLetter));
                     }
                 }
 
@@ -72,7 +73,13 @@ namespace LocalFileLister
                     lvFiles.ItemsSource = fullFileList;
                 });
             }
-            catch { }
+            catch 
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    tbxErrorMessage.Text = "Can't retriving file information";
+                });
+            }
             finally
             {
                 Dispatcher.Invoke(() =>
@@ -85,18 +92,10 @@ namespace LocalFileLister
         private void btnRefreshData_Click(object sender, RoutedEventArgs e)
         {
 
-            try
-            {
                loadingControl.Visibility = Visibility.Visible;
 
                 Thread fileSearchThread = new Thread(()=> { GetFiles(); });
-                fileSearchThread.Start();
-
-
-
-            }
-            catch { }
-           
+                fileSearchThread.Start();       
 
         }
 
