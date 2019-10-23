@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,14 +26,17 @@ namespace LocalFileLister
 
         public ObservableCollection<DriveDto> DriveList { get; set; }
 
+
+
         public MainWindow()
         {
             InitializeComponent();
 
-            SetDrives();
+            GetDrives();
+            loadingControl.Visibility = Visibility.Hidden;
         }
 
-        private void SetDrives()
+        private void GetDrives()
         {
             try
             {
@@ -50,23 +54,49 @@ namespace LocalFileLister
             }
         }
 
+        public void GetFiles()
+        {
+            try
+            {
+                var fullFileList = new List<LocalFileDto>();
+                foreach (var drive in DriveList.ToArray())
+                {
+                    if (drive.IsSelected)
+                    {
+                        fullFileList.AddRange(DriveOperations.GetLocalFiles(drive.DriveLetter));
+                    }
+                }
+
+                Dispatcher.Invoke(() =>
+                {
+                    lvFiles.ItemsSource = fullFileList;
+                });
+            }
+            catch { }
+            finally
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    loadingControl.Visibility = Visibility.Hidden;
+                });
+            }
+        }
+
         private void btnRefreshData_Click(object sender, RoutedEventArgs e)
         {
 
             try
             {
-                var fullFileList = new List<LocalFileDto>();
-                foreach(var drive in DriveList.ToArray())
-                {
-                    if (drive.IsSelected)
-                    {
-                        fullFileList.AddRange( DriveOperations.GetLocalFiles(drive.DriveLetter));
-                    }
-                }
+               loadingControl.Visibility = Visibility.Visible;
 
-                lvFiles.ItemsSource = fullFileList;
+                Thread fileSearchThread = new Thread(()=> { GetFiles(); });
+                fileSearchThread.Start();
+
+
+
             }
-            catch {}
+            catch { }
+           
 
         }
 

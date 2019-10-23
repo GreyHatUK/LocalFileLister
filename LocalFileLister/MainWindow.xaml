@@ -10,6 +10,7 @@
         
         <DockPanel Margin="5" >
             
+            
 
             <DockPanel DockPanel.Dock="Top">
             <ListBox x:Name="lbLocalDrives" ItemsSource="{Binding DriveList}" Grid.Row="1" Grid.Column="5" Height="50"  Background="Azure" DockPanel.Dock="Left" Width="100">
@@ -46,5 +47,6 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="2" x:Name="helperField"/>
         </Grid>
+        <local:LoadingControl  x:Name="loadingControl"></local:LoadingControl>
     </Grid>
 </Window>
